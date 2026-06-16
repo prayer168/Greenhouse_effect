@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>溫室效應探究與實作｜互動教材</title>
+  <meta name="description" content="透過可操作模型、證據判斷、減碳方案設計與闖關測驗，理解自然與增強溫室效應。">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="回到教材開頭">溫室效應探究與實作</a>
+    <nav class="nav-links" aria-label="單元導覽">
+      <a href="#goals">學習目標</a>
+      <a href="#compare">概念比較</a>
+      <a href="#lab">模擬實驗</a>
+      <a href="#action">實作設計</a>
+      <a href="#evidence">證據判斷</a>
+      <a href="#quiz">闖關</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <img src="assets/greenhouse-lab.svg" alt="" class="hero-art">
+      <div class="hero-content">
+        <p class="eyebrow">國小自然｜探究、實作、行動設計</p>
+        <h1 id="hero-title">看不見的氣體，怎麼讓地球留住熱？</h1>
+        <p>調整二氧化碳、雲量與地表反射，觀察熱量如何進出地球。先預測，再操作，最後設計一個能降溫的生活方案。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#lab">開始探索</a>
+          <a class="button secondary" href="#quiz">直接挑戰</a>
+        </div>
+      </div>
+      <aside class="hero-meter" aria-label="今日探究任務">
+        <strong>核心問題</strong>
+        <span>溫室效應是壞事嗎？</span>
+        <small>自然溫室效應讓地球適合生命；人類排放過多溫室氣體，會讓熱量留得更多。</small>
+      </aside>
+    </section>
+
+    <section id="goals" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">單元導覽</p>
+        <h2>學習目標</h2>
+      </div>
+      <div class="goal-grid">
+        <article>
+          <span class="icon">觀察</span>
+          <h3>觀察能量進出</h3>
+          <p>能用圖像說明太陽短波進入、地表長波紅外線向外散出，以及溫室氣體吸收部分熱量。</p>
+        </article>
+        <article>
+          <span class="icon">比較</span>
+          <h3>分辨自然與增強</h3>
+          <p>知道自然溫室效應是必要現象，增強溫室效應則和大量燃燒化石燃料、土地利用改變有關。</p>
+        </article>
+        <article>
+          <span class="icon">設計</span>
+          <h3>設計減碳方案</h3>
+          <p>能選擇生活或校園行動，評估減碳效果、可行性與需要合作的對象。</p>
+        </article>
+        <article>
+          <span class="icon">證據</span>
+          <h3>用證據說理由</h3>
+          <p>能判斷常見說法是否符合科學證據，並用一句話解釋自己的判斷。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="compare" class="section split">
+      <div class="section-heading">
+        <p class="eyebrow">單元一</p>
+        <h2>自然溫室效應 vs. 增強溫室效應</h2>
+        <p>點選下方模式，觀察「有一點溫室氣體」和「溫室氣體太多」的差別。</p>
+      </div>
+      <div class="compare-board">
+        <div class="mode-tabs" role="tablist" aria-label="溫室效應模式">
+          <button class="mode-tab active" type="button" data-mode="natural">自然狀態</button>
+          <button class="mode-tab" type="button" data-mode="enhanced">增強狀態</button>
+        </div>
+        <div class="compare-visual" id="compareVisual" aria-hidden="true">
+          <div class="sun-dot"></div>
+          <div class="atmosphere-ring"></div>
+          <div class="mini-earth"></div>
+          <div class="heat-arrow up"></div>
+          <div class="heat-arrow back"></div>
+        </div>
+        <div class="compare-text">
+          <h3 id="compareTitle">自然溫室效應</h3>
+          <p id="compareCopy">適量的水氣、二氧化碳和甲烷會留住一部分熱量，讓地球平均溫度不會太低。</p>
+          <ul id="compareList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="lab" class="section lab-section">
+      <div class="section-heading">
+        <p class="eyebrow">單元二</p>
+        <h2>溫室效應模擬實驗</h2>
+        <p>先想一想：哪些因素會讓地球吸收更多熱？調整滑桿後，觀察模型回饋。</p>
+      </div>
+
+      <div class="lab-layout">
+        <div class="simulation-panel">
+          <canvas id="climateCanvas" width="900" height="560" aria-label="溫室效應概念模型動畫"></canvas>
+          <div class="readout-grid" aria-live="polite">
+            <div>
+              <span>保留熱量</span>
+              <strong id="heatReadout">42%</strong>
+            </div>
+            <div>
+              <span>模型溫度變化</span>
+              <strong id="tempReadout">+1.2°C</strong>
+            </div>
+            <div>
+              <span>反射陽光</span>
+              <strong id="reflectReadout">31%</strong>
+            </div>
+          </div>
+        </div>
+
+        <form class="controls-panel" id="climateControls">
+          <div class="preset-row" aria-label="情境快速設定">
+            <button type="button" data-preset="preindustrial">1850 左右</button>
+            <button type="button" data-preset="today">今日附近</button>
+            <button type="button" data-preset="high">高排放</button>
+            <button type="button" data-preset="mitigation">減碳中</button>
+          </div>
+
+          <label class="slider-field">
+            <span>二氧化碳濃度 <strong id="co2Value">420 ppm</strong></span>
+            <input id="co2" type="range" min="280" max="900" value="420" step="10">
+          </label>
+          <label class="slider-field">
+            <span>甲烷影響 <strong id="methaneValue">45%</strong></span>
+            <input id="methane" type="range" min="0" max="100" value="45" step="5">
+          </label>
+          <label class="slider-field">
+            <span>雲與冰雪反射 <strong id="albedoValue">31%</strong></span>
+            <input id="albedo" type="range" min="18" max="52" value="31" step="1">
+          </label>
+          <label class="slider-field">
+            <span>節能與再生能源 <strong id="savingValue">20%</strong></span>
+            <input id="saving" type="range" min="0" max="100" value="20" step="5">
+          </label>
+
+          <div class="prediction-box">
+            <label for="prediction">我的預測</label>
+            <textarea id="prediction" rows="3" placeholder="例：如果二氧化碳增加，紅外線被留下的比例會變高。"></textarea>
+          </div>
+          <p class="model-note">這是教學用概念模型，重點是比較趨勢，不代表真實氣候預報。</p>
+        </form>
+      </div>
+    </section>
+
+    <section id="action" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">單元三</p>
+        <h2>校園減碳方案設計</h2>
+        <p>選擇最多 4 個行動，讓班級的「可行減碳指數」達到 100。注意：效果高不一定最容易做到。</p>
+      </div>
+      <div class="action-layout">
+        <div class="action-score">
+          <div class="score-ring" id="scoreRing"><span id="actionScore">0</span></div>
+          <p id="actionFeedback">先挑選你想實作的方案。</p>
+          <button class="button secondary" id="resetActions" type="button">重新設計</button>
+        </div>
+        <div class="action-cards" id="actionCards"></div>
+      </div>
+    </section>
+
+    <section id="evidence" class="section split">
+      <div class="section-heading">
+        <p class="eyebrow">單元四</p>
+        <h2>好證據還是迷思？</h2>
+        <p>點選左邊說法，判斷它比較接近科學證據，還是常見迷思。</p>
+      </div>
+      <div class="evidence-layout">
+        <div class="claim-list" id="claimList"></div>
+        <article class="claim-result" id="claimResult" aria-live="polite">
+          <h3>選一個說法開始</h3>
+          <p>好的科學判斷需要看長期資料、能量收支和多種證據，而不是只看某一天的天氣。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="quiz" class="section quiz-section">
+      <div class="section-heading">
+        <p class="eyebrow">最終關卡</p>
+        <h2>溫室效應闖關大挑戰</h2>
+        <p>完成 8 題測驗，看看你能不能拿到「氣候探究員」徽章。</p>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-topline">
+          <span id="quizProgress">第 1 / 8 題</span>
+          <strong id="quizScore">0 分</strong>
+        </div>
+        <h3 id="questionText"></h3>
+        <div class="choices" id="choices"></div>
+        <div class="quiz-feedback" id="quizFeedback" hidden></div>
+        <button class="button primary" id="nextQuestion" type="button" disabled>下一題</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

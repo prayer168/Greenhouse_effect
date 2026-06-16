@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">溫室效應探究實驗室背景</title>
+  <desc id="desc">地球、太陽光、紅外線與大氣層的概念圖。</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#18324a"/>
+      <stop offset=".52" stop-color="#3c6f88"/>
+      <stop offset="1" stop-color="#f2c879"/>
+    </linearGradient>
+    <radialGradient id="sun" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff7ba"/>
+      <stop offset=".58" stop-color="#ffd66b"/>
+      <stop offset="1" stop-color="#f39a3a"/>
+    </radialGradient>
+    <radialGradient id="earth" cx=".45" cy=".4" r=".62">
+      <stop offset="0" stop-color="#63c7c6"/>
+      <stop offset=".64" stop-color="#2b8797"/>
+      <stop offset="1" stop-color="#1f4c72"/>
+    </radialGradient>
+    <filter id="soft">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="720" fill="url(#sky)"/>
+  <circle cx="158" cy="134" r="76" fill="url(#sun)"/>
+  <g opacity=".58" stroke="#ffe49a" stroke-width="10" stroke-linecap="round">
+    <path d="M240 184 514 316"/>
+    <path d="M212 78 568 202"/>
+    <path d="M112 232 408 480"/>
+  </g>
+  <ellipse cx="684" cy="556" rx="420" ry="72" fill="#132231" opacity=".28" filter="url(#soft)"/>
+  <circle cx="690" cy="500" r="168" fill="url(#earth)"/>
+  <path d="M601 391c49 16 68 46 58 84-12 44-66 33-88 68-13 22 4 54 47 77-58-26-96-72-96-122 0-45 31-84 79-107Z" fill="#6fbf73"/>
+  <path d="M735 360c50 14 93 47 113 91-31-8-59 2-81 28-22 27-54 24-81 3-25-21-25-61 4-83 15-12 24-24 45-39Z" fill="#75c46d"/>
+  <path d="M774 550c42-4 74 9 94 34-27 39-75 66-130 77-8-25-3-48 16-67 13-13 16-27 20-44Z" fill="#6ab468"/>
+  <g fill="none" stroke-linecap="round" stroke-width="7">
+    <path d="M554 300c92-76 246-72 332 12" stroke="#d9f2ff" opacity=".52"/>
+    <path d="M501 257c124-111 331-103 445 19" stroke="#d9f2ff" opacity=".35"/>
+    <path d="M464 214c153-145 413-132 553 27" stroke="#d9f2ff" opacity=".22"/>
+  </g>
+  <g stroke="#ff8b6b" stroke-width="9" stroke-linecap="round" fill="none" opacity=".8">
+    <path d="M666 349c-34-52-32-96 7-133"/>
+    <path d="M748 351c50-43 66-88 47-135"/>
+    <path d="M841 412c68-12 112-45 132-98"/>
+  </g>
+  <g stroke="#ffd2c1" stroke-width="7" stroke-linecap="round" fill="none" opacity=".85">
+    <path d="M611 331c-42-36-83-44-125-22"/>
+    <path d="M775 338c34-46 82-63 145-52"/>
+  </g>
+</svg>
