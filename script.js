@@ -104,6 +104,18 @@ const questions = [
     choices: ["用來比較趨勢的概念模型", "精準預測未來某一天氣溫", "氣象局即時資料", "和真實世界完全無關"],
     answer: 0,
     explain: "模型用來幫助理解變因關係，不是正式氣候預報。"
+  },
+  {
+    q: "如果想設計一個公平的溫室效應比較實驗，最好怎麼做？",
+    choices: ["一次只改變一個主要變因", "每次同時亂改所有滑桿", "只看自己喜歡的結果", "不需要記錄任何數字"],
+    answer: 0,
+    explain: "公平比較要盡量控制其他條件，才能判斷是哪一個變因造成觀察到的差異。"
+  },
+  {
+    q: "下列哪一項最像是可在校園實作的減碳紀錄方式？",
+    choices: ["每週記錄用電與完成的節能行動", "只在月底猜一次結果", "只記錄天氣，不記錄行動", "由一個人憑印象決定分數"],
+    answer: 0,
+    explain: "持續記錄行動和數據，才能比較方案是否真的有幫助，也方便小組討論改進。"
   }
 ];
 
@@ -122,28 +134,25 @@ let quizIndex = 0;
 let quizScore = 0;
 let answered = false;
 
-function updateActiveNav(id) {
-  document.querySelectorAll(".nav-links a").forEach(link => {
-    link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
+function setActiveTab(id) {
+  document.querySelectorAll(".tab-panel").forEach(panel => {
+    panel.classList.toggle("active", panel.id === id);
   });
+  document.querySelectorAll(".tab-trigger").forEach(trigger => {
+    trigger.classList.toggle("active", trigger.dataset.tab === id);
+  });
+  if (id === "lab") {
+    drawClimate();
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function setupSectionObserver() {
-  const sections = document.querySelectorAll("main > section[id]");
-  if (!("IntersectionObserver" in window)) {
-    updateActiveNav("goals");
-    return;
-  }
-  const observer = new IntersectionObserver(entries => {
-    const visible = entries
-      .filter(entry => entry.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (visible) updateActiveNav(visible.target.id);
-  }, {
-    rootMargin: "-30% 0px -52% 0px",
-    threshold: [0.2, 0.45, 0.7]
+function setupTabs() {
+  document.querySelectorAll(".tab-trigger").forEach(trigger => {
+    trigger.addEventListener("click", () => {
+      setActiveTab(trigger.dataset.tab);
+    });
   });
-  sections.forEach(section => observer.observe(section));
 }
 
 function updateCompare(mode) {
@@ -456,5 +465,5 @@ renderActions();
 renderClaims();
 bindQuizEvents();
 renderQuiz();
-setupSectionObserver();
+setupTabs();
 animate();
