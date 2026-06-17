@@ -122,6 +122,30 @@ let quizIndex = 0;
 let quizScore = 0;
 let answered = false;
 
+function updateActiveNav(id) {
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
+  });
+}
+
+function setupSectionObserver() {
+  const sections = document.querySelectorAll("main > section[id]");
+  if (!("IntersectionObserver" in window)) {
+    updateActiveNav("goals");
+    return;
+  }
+  const observer = new IntersectionObserver(entries => {
+    const visible = entries
+      .filter(entry => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (visible) updateActiveNav(visible.target.id);
+  }, {
+    rootMargin: "-30% 0px -52% 0px",
+    threshold: [0.2, 0.45, 0.7]
+  });
+  sections.forEach(section => observer.observe(section));
+}
+
 function updateCompare(mode) {
   const data = compareData[mode];
   document.querySelector("#compareTitle").textContent = data.title;
@@ -269,6 +293,7 @@ function renderActions() {
   const limitedScore = Math.min(100, score);
   document.querySelector("#actionScore").textContent = limitedScore;
   document.querySelector("#scoreRing").style.background = `conic-gradient(var(--teal) ${limitedScore * 3.6}deg, #e5eeed 0deg)`;
+  document.querySelector(".action-score").classList.toggle("active", selectedActions.size > 0);
   const feedback = document.querySelector("#actionFeedback");
   if (selectedActions.size === 0) {
     feedback.textContent = "先挑選你想實作的方案。";
@@ -293,10 +318,20 @@ function selectClaim(index) {
     button.classList.toggle("active", Number(button.dataset.claim) === index);
   });
   document.querySelector("#claimResult").innerHTML = `
+    <svg class="evidence-scale" viewBox="0 0 260 150" aria-hidden="true">
+      <line class="scale-bar" x1="70" y1="54" x2="190" y2="54"/>
+      <line x1="130" y1="36" x2="130" y2="124"/>
+      <path class="scale-pan pan-left" d="M72 58 l-34 48 h68 Z"/>
+      <path class="scale-pan pan-right" d="M188 58 l-34 48 h68 Z"/>
+      <circle cx="130" cy="34" r="12"/>
+      <text x="52" y="133">說法</text>
+      <text x="170" y="133">證據</text>
+    </svg>
     <span class="claim-badge ${claim.type === "myth" ? "myth" : ""}">${claim.title}</span>
     <h3>${claim.text}</h3>
     <p>${claim.explain}</p>
   `;
+  document.querySelector("#claimResult").classList.add("has-evidence");
 }
 
 function renderQuiz() {
@@ -305,6 +340,7 @@ function renderQuiz() {
   document.querySelector("#quizProgress").textContent = `第 ${quizIndex + 1} / ${questions.length} 題`;
   document.querySelector("#quizScore").textContent = `${quizScore} 分`;
   document.querySelector("#questionText").textContent = item.q;
+  document.querySelector(".quiz-card").classList.remove("answered");
   document.querySelector("#choices").innerHTML = item.choices.map((choice, index) => `
     <button class="choice-button" type="button" data-choice="${index}">${choice}</button>
   `).join("");
@@ -328,6 +364,7 @@ function chooseAnswer(index) {
   });
 
   const feedback = document.querySelector("#quizFeedback");
+  document.querySelector(".quiz-card").classList.add("answered");
   feedback.hidden = false;
   feedback.textContent = `${correct ? "答對了。" : "再想想。"} ${item.explain}`;
   document.querySelector("#quizScore").textContent = `${quizScore} 分`;
@@ -419,4 +456,5 @@ renderActions();
 renderClaims();
 bindQuizEvents();
 renderQuiz();
+setupSectionObserver();
 animate();

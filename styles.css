@@ -87,6 +87,11 @@ a {
   color: var(--night);
 }
 
+.nav-links a.active {
+  background: var(--night);
+  color: #fff;
+}
+
 main {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
@@ -266,6 +271,56 @@ h3 {
   line-height: 1.75;
 }
 
+.section-visual {
+  margin: 0 0 18px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f6fbfa, #fff8e8);
+}
+
+.section-visual svg,
+.compare-svg,
+.action-visual,
+.evidence-scale,
+.quiz-badge {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.goals-visual {
+  padding: 10px 14px;
+}
+
+.flow-line {
+  fill: none;
+  stroke: rgba(31, 111, 139, .34);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 32 18;
+  animation: flowDash 4.6s linear infinite;
+}
+
+.flow-node circle {
+  fill: #fff;
+  stroke: var(--teal);
+  stroke-width: 5;
+  filter: drop-shadow(0 8px 14px rgba(23, 32, 41, .12));
+}
+
+.flow-node text {
+  fill: var(--night);
+  font-size: 15px;
+  font-weight: 900;
+  text-anchor: middle;
+}
+
+.node-one { animation: nodePulse 3.2s ease-in-out infinite; }
+.node-two { animation: nodePulse 3.2s ease-in-out .45s infinite; }
+.node-three { animation: nodePulse 3.2s ease-in-out .9s infinite; }
+.node-four { animation: nodePulse 3.2s ease-in-out 1.35s infinite; }
+
 .goal-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -325,6 +380,47 @@ h3 {
   grid-template-columns: 210px minmax(220px, 1fr);
   gap: 18px;
   padding: 18px;
+}
+
+.compare-svg {
+  grid-column: 1 / -1;
+  min-height: 84px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f7fbff;
+}
+
+.solar-path,
+.infrared-path {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.solar-path {
+  stroke: rgba(243, 189, 74, .78);
+}
+
+.infrared-path {
+  stroke: rgba(217, 105, 79, .72);
+  stroke-dasharray: 16 12;
+  animation: flowDash 2.8s linear infinite;
+}
+
+.moving-sun {
+  fill: var(--sun);
+  animation: slideSun 3.4s ease-in-out infinite;
+}
+
+.moving-heat {
+  fill: var(--coral);
+  animation: returnHeat 3.4s ease-in-out infinite;
+}
+
+.compare-svg text {
+  fill: var(--muted);
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .mode-tabs {
@@ -542,6 +638,33 @@ textarea {
   text-align: center;
 }
 
+.action-visual {
+  margin-bottom: 8px;
+}
+
+.action-road {
+  fill: none;
+  stroke: rgba(31, 111, 139, .28);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 18 12;
+  animation: flowDash 3.6s linear infinite;
+}
+
+.action-step {
+  fill: #fff;
+  stroke: var(--teal);
+  stroke-width: 5;
+}
+
+.action-score.active .action-step {
+  animation: nodePulse 2.4s ease-in-out infinite;
+}
+
+.action-score.active .step-b { animation-delay: .2s; }
+.action-score.active .step-c { animation-delay: .4s; }
+.action-score.active .step-d { animation-delay: .6s; }
+
 .score-ring {
   width: 150px;
   height: 150px;
@@ -620,6 +743,44 @@ textarea {
   padding: 22px;
 }
 
+.evidence-scale {
+  max-width: 260px;
+  margin: 0 auto 12px;
+}
+
+.evidence-scale line,
+.scale-bar {
+  stroke: var(--night);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.scale-pan {
+  fill: #fff6df;
+  stroke: var(--sun);
+  stroke-width: 4;
+}
+
+.claim-result.has-evidence .scale-bar {
+  transform-origin: 130px 54px;
+  animation: scaleSettle 1.2s ease-in-out;
+}
+
+.claim-result.has-evidence .pan-left {
+  animation: panDipLeft 1.2s ease-in-out;
+}
+
+.claim-result.has-evidence .pan-right {
+  animation: panDipRight 1.2s ease-in-out;
+}
+
+.evidence-scale text {
+  fill: var(--muted);
+  font-size: 15px;
+  font-weight: 900;
+  text-anchor: middle;
+}
+
 .claim-badge {
   display: inline-flex;
   margin-bottom: 12px;
@@ -637,6 +798,40 @@ textarea {
 .quiz-card {
   max-width: 840px;
   padding: clamp(18px, 4vw, 28px);
+}
+
+.quiz-badge {
+  max-width: 220px;
+  margin: 0 auto 12px;
+}
+
+.badge-orbit {
+  fill: none;
+  stroke: rgba(31, 111, 139, .36);
+  stroke-width: 7;
+  stroke-dasharray: 14 10;
+  animation: flowDash 3.2s linear infinite;
+}
+
+.badge-core {
+  fill: #eef8f6;
+  stroke: var(--teal);
+  stroke-width: 6;
+  animation: nodePulse 2.8s ease-in-out infinite;
+}
+
+.badge-check {
+  fill: none;
+  stroke: var(--leaf);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 52;
+  stroke-dashoffset: 52;
+}
+
+.quiz-card.answered .badge-check {
+  animation: drawCheck .7s ease-out forwards;
 }
 
 .quiz-topline {
@@ -693,6 +888,92 @@ textarea {
 #nextQuestion:disabled {
   opacity: .5;
   cursor: not-allowed;
+}
+
+@keyframes flowDash {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+@keyframes nodePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes slideSun {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(250px);
+  }
+}
+
+@keyframes returnHeat {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(190px, -34px);
+  }
+}
+
+@keyframes scaleSettle {
+  0% {
+    transform: rotate(-7deg);
+  }
+  55% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+@keyframes panDipLeft {
+  0% {
+    transform: translateY(-6px);
+  }
+  60% {
+    transform: translateY(6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes panDipRight {
+  0% {
+    transform: translateY(6px);
+  }
+  60% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
 }
 
 @media (max-width: 920px) {

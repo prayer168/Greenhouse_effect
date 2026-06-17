@@ -44,6 +44,27 @@
         <p class="eyebrow">單元導覽</p>
         <h2>學習目標</h2>
       </div>
+      <div class="section-visual goals-visual" aria-hidden="true">
+        <svg viewBox="0 0 920 150">
+          <path class="flow-line" d="M72 76 C180 14 270 136 382 76 S585 20 700 76 S800 124 850 76"/>
+          <g class="flow-node node-one">
+            <circle cx="72" cy="76" r="26"/>
+            <text x="72" y="82">觀察</text>
+          </g>
+          <g class="flow-node node-two">
+            <circle cx="382" cy="76" r="26"/>
+            <text x="382" y="82">比較</text>
+          </g>
+          <g class="flow-node node-three">
+            <circle cx="700" cy="76" r="26"/>
+            <text x="700" y="82">實作</text>
+          </g>
+          <g class="flow-node node-four">
+            <circle cx="850" cy="76" r="26"/>
+            <text x="850" y="82">證據</text>
+          </g>
+        </svg>
+      </div>
       <div class="goal-grid">
         <article>
           <span class="icon">觀察</span>
@@ -79,6 +100,14 @@
           <button class="mode-tab active" type="button" data-mode="natural">自然狀態</button>
           <button class="mode-tab" type="button" data-mode="enhanced">增強狀態</button>
         </div>
+        <svg class="compare-svg" viewBox="0 0 640 84" aria-hidden="true">
+          <path class="solar-path" d="M38 22 H300"/>
+          <path class="infrared-path" d="M330 62 C410 8 520 10 590 58"/>
+          <circle class="moving-sun" cx="38" cy="22" r="9"/>
+          <circle class="moving-heat" cx="330" cy="62" r="8"/>
+          <text x="38" y="74">短波進入</text>
+          <text x="462" y="74">紅外線部分回射</text>
+        </svg>
         <div class="compare-visual" id="compareVisual" aria-hidden="true">
           <div class="sun-dot"></div>
           <div class="atmosphere-ring"></div>
@@ -162,6 +191,13 @@
       </div>
       <div class="action-layout">
         <div class="action-score">
+          <svg class="action-visual" viewBox="0 0 220 90" aria-hidden="true">
+            <path class="action-road" d="M18 68 C70 18 144 18 202 68"/>
+            <circle class="action-step step-a" cx="18" cy="68" r="10"/>
+            <circle class="action-step step-b" cx="82" cy="36" r="10"/>
+            <circle class="action-step step-c" cx="146" cy="36" r="10"/>
+            <circle class="action-step step-d" cx="202" cy="68" r="10"/>
+          </svg>
           <div class="score-ring" id="scoreRing"><span id="actionScore">0</span></div>
           <p id="actionFeedback">先挑選你想實作的方案。</p>
           <button class="button secondary" id="resetActions" type="button">重新設計</button>
@@ -179,6 +215,15 @@
       <div class="evidence-layout">
         <div class="claim-list" id="claimList"></div>
         <article class="claim-result" id="claimResult" aria-live="polite">
+          <svg class="evidence-scale" viewBox="0 0 260 150" aria-hidden="true">
+            <line class="scale-bar" x1="70" y1="54" x2="190" y2="54"/>
+            <line x1="130" y1="36" x2="130" y2="124"/>
+            <path class="scale-pan pan-left" d="M72 58 l-34 48 h68 Z"/>
+            <path class="scale-pan pan-right" d="M188 58 l-34 48 h68 Z"/>
+            <circle cx="130" cy="34" r="12"/>
+            <text x="52" y="133">說法</text>
+            <text x="170" y="133">證據</text>
+          </svg>
           <h3>選一個說法開始</h3>
           <p>好的科學判斷需要看長期資料、能量收支和多種證據，而不是只看某一天的天氣。</p>
         </article>
@@ -192,6 +237,11 @@
         <p>完成 8 題測驗，看看你能不能拿到「氣候探究員」徽章。</p>
       </div>
       <div class="quiz-card">
+        <svg class="quiz-badge" viewBox="0 0 220 110" aria-hidden="true">
+          <path class="badge-orbit" d="M30 56 C72 10 148 10 190 56 C148 102 72 102 30 56"/>
+          <circle class="badge-core" cx="110" cy="56" r="28"/>
+          <path class="badge-check" d="M98 56 l9 10 l19 -23"/>
+        </svg>
         <div class="quiz-topline">
           <span id="quizProgress">第 1 / 8 題</span>
           <strong id="quizScore">0 分</strong>
