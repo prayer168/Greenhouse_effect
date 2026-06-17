@@ -93,27 +93,67 @@
       <div class="section-heading">
         <p class="eyebrow">單元一</p>
         <h2>自然溫室效應 vs. 增強溫室效應</h2>
-        <p>點選下方模式，觀察「有一點溫室氣體」和「溫室氣體太多」的差別。</p>
+        <p>點選右側模式，觀察熱量散出與回射的差別。</p>
       </div>
       <div class="compare-board">
         <div class="mode-tabs" role="tablist" aria-label="溫室效應模式">
           <button class="mode-tab active" type="button" data-mode="natural">自然狀態</button>
           <button class="mode-tab" type="button" data-mode="enhanced">增強狀態</button>
         </div>
-        <svg class="compare-svg" viewBox="0 0 640 84" aria-hidden="true">
-          <path class="solar-path" d="M38 22 H300"/>
-          <path class="infrared-path" d="M330 62 C410 8 520 10 590 58"/>
-          <circle class="moving-sun" cx="38" cy="22" r="9"/>
-          <circle class="moving-heat" cx="330" cy="62" r="8"/>
-          <text x="38" y="74">短波進入</text>
-          <text x="462" y="74">紅外線部分回射</text>
-        </svg>
-        <div class="compare-visual" id="compareVisual" aria-hidden="true">
-          <div class="sun-dot"></div>
-          <div class="atmosphere-ring"></div>
-          <div class="mini-earth"></div>
-          <div class="heat-arrow up"></div>
-          <div class="heat-arrow back"></div>
+        <div class="compare-visual" id="compareVisual">
+          <svg class="compare-scene" viewBox="0 0 520 420" role="img" aria-labelledby="compareSceneTitle compareSceneDesc">
+            <title id="compareSceneTitle">溫室效應能量進出示意</title>
+            <desc id="compareSceneDesc">太陽短波進入地球，地表放出紅外線，溫室氣體讓部分熱量回到地表。</desc>
+            <defs>
+              <marker id="arrowSun" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M1 1 L11 6 L1 11 Z" fill="#f3bd4a"/>
+              </marker>
+              <marker id="arrowHeat" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M1 1 L11 6 L1 11 Z" fill="#d9694f"/>
+              </marker>
+              <marker id="arrowReturn" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M1 1 L11 6 L1 11 Z" fill="#f08b6e"/>
+              </marker>
+              <radialGradient id="sceneEarth" cx="42%" cy="34%" r="66%">
+                <stop offset="0" stop-color="#79d7cf"/>
+                <stop offset=".6" stop-color="#2f8eaa"/>
+                <stop offset="1" stop-color="#17476b"/>
+              </radialGradient>
+            </defs>
+            <rect class="scene-sky" x="0" y="0" width="520" height="420" rx="8"/>
+            <circle class="scene-sun" cx="86" cy="82" r="42"/>
+            <g class="sunbeams">
+              <path d="M126 96 C190 114 230 140 278 186"/>
+              <path d="M110 124 C164 168 206 206 264 248"/>
+            </g>
+            <path class="atmosphere natural-layer" d="M143 297 C170 185 356 185 382 297"/>
+            <path class="atmosphere enhanced-layer" d="M118 298 C152 150 374 150 408 298"/>
+            <circle class="scene-earth" cx="262" cy="300" r="78"/>
+            <path class="land land-one" d="M211 258 c35 5 43 28 26 52 c-12 16-40 8-50-10 c-10-18 0-35 24-42Z"/>
+            <path class="land land-two" d="M289 242 c31 7 51 29 54 59 c-29-5-47 11-67 3 c-24-10-22-48 13-62Z"/>
+            <g class="escaping-heat">
+              <path d="M230 236 C204 164 180 116 154 82"/>
+              <path d="M268 222 C270 150 286 102 324 62"/>
+              <path d="M304 238 C350 176 398 132 458 104"/>
+            </g>
+            <g class="returning-heat">
+              <path d="M176 134 C200 176 214 216 228 258"/>
+              <path d="M344 120 C326 170 306 214 288 258"/>
+              <path class="extra-return" d="M425 142 C380 190 352 228 318 274"/>
+            </g>
+            <g class="gas-dots">
+              <circle cx="170" cy="208" r="5"/>
+              <circle cx="220" cy="170" r="5"/>
+              <circle cx="306" cy="166" r="5"/>
+              <circle cx="360" cy="208" r="5"/>
+              <circle class="extra-gas" cx="142" cy="248" r="5"/>
+              <circle class="extra-gas" cx="392" cy="248" r="5"/>
+            </g>
+            <text class="scene-label sun-label" x="78" y="160">短波進入</text>
+            <text class="scene-label escape-label" x="330" y="58">熱量散出</text>
+            <text class="scene-label return-label" x="334" y="350">部分熱量回射</text>
+            <text class="scene-caption" x="260" y="394" id="compareCaption">適量溫室氣體：保留一部分熱量，仍讓熱散出</text>
+          </svg>
         </div>
         <div class="compare-text">
           <h3 id="compareTitle">自然溫室效應</h3>

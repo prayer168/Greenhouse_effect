@@ -305,7 +305,6 @@ h3 {
 }
 
 .section-visual svg,
-.compare-svg,
 .action-visual,
 .evidence-scale,
 .quiz-badge {
@@ -402,50 +401,9 @@ h3 {
 
 .compare-board {
   display: grid;
-  grid-template-columns: 210px minmax(220px, 1fr);
-  gap: 18px;
+  grid-template-columns: minmax(270px, .82fr) minmax(320px, 1fr);
+  gap: 18px 22px;
   padding: 18px;
-}
-
-.compare-svg {
-  grid-column: 1 / -1;
-  min-height: 84px;
-  padding: 10px;
-  border-radius: 8px;
-  background: #f7fbff;
-}
-
-.solar-path,
-.infrared-path {
-  fill: none;
-  stroke-width: 7;
-  stroke-linecap: round;
-}
-
-.solar-path {
-  stroke: rgba(243, 189, 74, .78);
-}
-
-.infrared-path {
-  stroke: rgba(217, 105, 79, .72);
-  stroke-dasharray: 16 12;
-  animation: flowDash 2.8s linear infinite;
-}
-
-.moving-sun {
-  fill: var(--sun);
-  animation: slideSun 3.4s ease-in-out infinite;
-}
-
-.moving-heat {
-  fill: var(--coral);
-  animation: returnHeat 3.4s ease-in-out infinite;
-}
-
-.compare-svg text {
-  fill: var(--muted);
-  font-size: 15px;
-  font-weight: 800;
 }
 
 .mode-tabs {
@@ -467,76 +425,132 @@ h3 {
 
 .compare-visual {
   position: relative;
-  min-height: 250px;
+  min-height: 312px;
   overflow: hidden;
   border-radius: 8px;
-  background: linear-gradient(#244b68, #f2bd68);
+  background: #102438;
 }
 
-.sun-dot,
-.mini-earth,
-.atmosphere-ring,
-.heat-arrow {
-  position: absolute;
+.compare-scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 312px;
 }
 
-.sun-dot {
-  top: 20px;
-  left: 22px;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--sun);
-  box-shadow: 0 0 24px rgba(243, 189, 74, .7);
+.scene-sky {
+  fill: #17324a;
 }
 
-.mini-earth {
-  left: 52px;
-  bottom: 24px;
-  width: 116px;
-  height: 116px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 32%, #7ed2c9, #27799b 62%, #1a456c);
+.scene-sun {
+  fill: var(--sun);
+  filter: drop-shadow(0 0 18px rgba(243, 189, 74, .55));
 }
 
-.atmosphere-ring {
-  left: 33px;
-  bottom: 5px;
-  width: 154px;
-  height: 154px;
-  border: 7px solid rgba(219, 242, 255, .42);
-  border-radius: 50%;
+.sunbeams path,
+.escaping-heat path,
+.returning-heat path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 8;
 }
 
-.heat-arrow {
-  width: 9px;
-  border-radius: 999px;
-  background: var(--coral);
+.sunbeams path {
+  marker-end: url("#arrowSun");
+  stroke: rgba(243, 189, 74, .88);
+  stroke-dasharray: 18 14;
+  animation: energyMove 2.7s linear infinite;
 }
 
-.heat-arrow.up {
-  left: 138px;
-  bottom: 136px;
-  height: 70px;
-  transform: rotate(24deg);
+.escaping-heat path {
+  marker-end: url("#arrowHeat");
+  stroke: rgba(217, 105, 79, .78);
+  stroke-dasharray: 15 13;
+  animation: energyMove 3s linear infinite reverse;
 }
 
-.heat-arrow.back {
-  left: 72px;
-  bottom: 140px;
-  height: 70px;
-  transform: rotate(-28deg);
-  opacity: .65;
+.returning-heat path {
+  marker-end: url("#arrowReturn");
+  stroke: rgba(240, 139, 110, .74);
+  stroke-dasharray: 14 12;
+  animation: energyMove 2.5s linear infinite;
 }
 
-.compare-visual.enhanced .atmosphere-ring {
-  border-width: 13px;
-  border-color: rgba(255, 229, 170, .72);
+.compare-visual:not(.enhanced) .extra-return,
+.compare-visual:not(.enhanced) .extra-gas,
+.compare-visual:not(.enhanced) .enhanced-layer {
+  opacity: 0;
 }
 
-.compare-visual.enhanced .heat-arrow.back {
-  height: 110px;
-  opacity: 1;
+.compare-visual.enhanced .returning-heat path {
+  stroke-width: 11;
+  opacity: .95;
+}
+
+.compare-visual.enhanced .escaping-heat path {
+  opacity: .46;
+}
+
+.atmosphere {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.natural-layer {
+  stroke: rgba(216, 242, 255, .58);
+  stroke-width: 14;
+}
+
+.enhanced-layer {
+  stroke: rgba(255, 229, 170, .64);
+  stroke-width: 24;
+  transition: opacity 180ms ease;
+}
+
+.scene-earth {
+  fill: url("#sceneEarth");
+}
+
+.land {
+  fill: rgba(113, 190, 110, .86);
+}
+
+.gas-dots circle {
+  fill: rgba(255, 231, 163, .9);
+  stroke: rgba(255, 255, 255, .72);
+  stroke-width: 2;
+  animation: gasFloat 2.8s ease-in-out infinite;
+}
+
+.gas-dots circle:nth-child(2n) {
+  animation-delay: .8s;
+}
+
+.scene-label,
+.scene-caption {
+  fill: rgba(255, 255, 255, .9);
+  font-weight: 900;
+}
+
+.scene-label {
+  font-size: 19px;
+}
+
+.scene-caption {
+  text-anchor: middle;
+  font-size: 17px;
+}
+
+.return-label {
+  fill: #ffd4c7;
+}
+
+.escape-label {
+  fill: #ffdfd5;
+}
+
+.sun-label {
+  fill: #ffe4a8;
 }
 
 .compare-text ul {
@@ -921,30 +935,27 @@ textarea {
   }
 }
 
+@keyframes energyMove {
+  to {
+    stroke-dashoffset: -80;
+  }
+}
+
+@keyframes gasFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 @keyframes nodePulse {
   0%, 100% {
     transform: scale(1);
   }
   50% {
     transform: scale(1.08);
-  }
-}
-
-@keyframes slideSun {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(250px);
-  }
-}
-
-@keyframes returnHeat {
-  0%, 100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(190px, -34px);
   }
 }
 

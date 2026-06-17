@@ -161,6 +161,9 @@ function updateCompare(mode) {
   document.querySelector("#compareCopy").textContent = data.copy;
   document.querySelector("#compareList").innerHTML = data.points.map(point => `<li>${point}</li>`).join("");
   document.querySelector("#compareVisual").classList.toggle("enhanced", mode === "enhanced");
+  document.querySelector("#compareCaption").textContent = mode === "enhanced"
+    ? "溫室氣體變多：更多熱量回射，散到太空的熱變少"
+    : "適量溫室氣體：保留一部分熱量，仍讓熱散出";
   document.querySelectorAll(".mode-tab").forEach(button => {
     button.classList.toggle("active", button.dataset.mode === mode);
   });
