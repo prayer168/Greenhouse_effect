@@ -189,6 +189,26 @@ function updateReadouts() {
   document.querySelector("#heatReadout").textContent = `${state.retainedHeat}%`;
   document.querySelector("#tempReadout").textContent = `${state.temp >= 0 ? "+" : ""}${state.temp.toFixed(1)}°C`;
   document.querySelector("#reflectReadout").textContent = `${state.albedo}%`;
+  document.querySelector("#labInsight").textContent = labInsightText(state);
+}
+
+function labInsightText(state) {
+  const heatPart = state.retainedHeat >= 62
+    ? "溫室氣體偏多，紅外線回射變強，熱量較不容易散到太空。"
+    : state.retainedHeat <= 36
+      ? "溫室氣體較少，較多紅外線能散到太空。"
+      : "溫室氣體保留一部分熱量，地球仍會持續向外散熱。";
+  const reflectPart = state.albedo >= 40
+    ? "反射率高，雲與冰雪把較多陽光反射回去。"
+    : state.albedo <= 24
+      ? "反射率低，地表吸收的太陽能較多。"
+      : "反射率中等，部分陽光被反射、部分被吸收。";
+  const savingPart = state.saving >= 60
+    ? "節能與再生能源比例高，排放壓力下降。"
+    : state.saving <= 20
+      ? "節能比例低，排放壓力仍然明顯。"
+      : "節能行動正在減少一部分排放壓力。";
+  return `${heatPart} ${reflectPart} ${savingPart}`;
 }
 
 function drawArrow(x1, y1, x2, y2, color, width = 5) {
@@ -209,6 +229,37 @@ function drawArrow(x1, y1, x2, y2, color, width = 5) {
   ctx.fill();
 }
 
+function drawLabel(text, x, y, options = {}) {
+  const paddingX = options.paddingX ?? 12;
+  const paddingY = options.paddingY ?? 7;
+  const fontSize = options.fontSize ?? 18;
+  ctx.save();
+  ctx.font = `700 ${fontSize}px Microsoft JhengHei, sans-serif`;
+  const metrics = ctx.measureText(text);
+  const width = metrics.width + paddingX * 2;
+  const height = fontSize + paddingY * 2;
+  ctx.fillStyle = options.background ?? "rgba(10, 24, 38, .76)";
+  roundRect(x, y, width, height, 8);
+  ctx.fill();
+  ctx.fillStyle = options.color ?? "rgba(255,255,255,.94)";
+  ctx.fillText(text, x + paddingX, y + fontSize + paddingY - 2);
+  ctx.restore();
+}
+
+function roundRect(x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
+
 function drawClimate() {
   const state = climateState();
   const w = canvas.width;
@@ -216,32 +267,56 @@ function drawClimate() {
   animationTick += 0.012;
 
   const sky = ctx.createLinearGradient(0, 0, 0, h);
-  sky.addColorStop(0, "#142b42");
-  sky.addColorStop(.58, "#3b718c");
+  sky.addColorStop(0, state.retainedHeat > 62 ? "#211f3d" : "#142b42");
+  sky.addColorStop(.58, state.retainedHeat > 62 ? "#5f6f85" : "#3b718c");
   sky.addColorStop(1, "#f0c170");
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, w, h);
+
+  const earthX = w * .58;
+  const earthY = h * .69;
+  const earthR = Math.min(w, h) * .17;
+  const atmosphereR = earthR + 34 + state.retainedHeat * .32;
+  const albedoCount = Math.round(state.albedo / 8);
+  const heatLines = 3 + Math.round(state.retainedHeat / 16);
+  const gasCount = Math.max(6, Math.round(state.retainedHeat / 7));
 
   ctx.fillStyle = "#f5c04e";
   ctx.beginPath();
   ctx.arc(116, 108, 58, 0, Math.PI * 2);
   ctx.fill();
+  drawLabel("太陽短波進入", 194, 64, { background: "rgba(72, 48, 16, .55)", color: "#fff1c7" });
 
   for (let i = 0; i < 5; i += 1) {
     const y = 92 + i * 38 + Math.sin(animationTick * 3 + i) * 5;
-    drawArrow(172, y, 455, 244 + i * 22, "rgba(255,224,145,.82)", 6);
+    drawArrow(172, y, earthX - 82, earthY - 170 + i * 34, "rgba(255,224,145,.82)", 6);
   }
 
-  const earthX = w * .56;
-  const earthY = h * .72;
-  const earthR = Math.min(w, h) * .18;
-  const atmos = earthR + 34 + state.retainedHeat * .28;
+  drawLabel(`雲與冰雪反射 ${state.albedo}%`, w - 296, 76, { background: "rgba(217, 242, 255, .18)" });
+  for (let i = 0; i < albedoCount; i += 1) {
+    const startX = earthX - 160 + i * 46;
+    const startY = earthY - 175 + Math.sin(animationTick * 2 + i) * 8;
+    drawArrow(startX, startY, startX - 92, startY - 88, "rgba(218,244,255,.78)", 4);
+  }
 
-  ctx.strokeStyle = `rgba(221,244,255,${0.22 + state.retainedHeat / 180})`;
-  ctx.lineWidth = 12 + state.retainedHeat / 12;
+  ctx.strokeStyle = `rgba(221,244,255,${0.24 + state.retainedHeat / 170})`;
+  ctx.lineWidth = 10 + state.retainedHeat / 8;
   ctx.beginPath();
-  ctx.arc(earthX, earthY, atmos, Math.PI * 1.08, Math.PI * 1.92);
+  ctx.arc(earthX, earthY, atmosphereR, Math.PI * 1.08, Math.PI * 1.92);
   ctx.stroke();
+  drawLabel(`CO2 ${state.co2} ppm / 甲烷 ${state.methane}%`, earthX - 150, earthY - atmosphereR - 42, {
+    background: "rgba(255, 231, 163, .2)",
+    color: "#fff7d4"
+  });
+
+  ctx.fillStyle = "rgba(255, 232, 160, .9)";
+  for (let i = 0; i < gasCount; i += 1) {
+    const angle = Math.PI * (1.08 + (0.84 * i) / Math.max(1, gasCount - 1));
+    const radius = atmosphereR + Math.sin(animationTick * 2 + i) * 6;
+    ctx.beginPath();
+    ctx.arc(earthX + Math.cos(angle) * radius, earthY + Math.sin(angle) * radius, 4.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
   const earthGradient = ctx.createRadialGradient(earthX - 45, earthY - 60, 20, earthX, earthY, earthR);
   earthGradient.addColorStop(0, "#8bd8c9");
@@ -263,21 +338,28 @@ function drawClimate() {
   ctx.ellipse(earthX + 25, earthY + 72, 72, 34, -.2, 0, Math.PI * 2);
   ctx.fill();
 
-  const heatLines = 3 + Math.round(state.retainedHeat / 18);
   for (let i = 0; i < heatLines; i += 1) {
     const startX = earthX - 110 + i * (220 / Math.max(1, heatLines - 1));
     const startY = earthY - earthR + 16;
     const endX = startX + Math.sin(animationTick * 4 + i) * 20;
     const endY = startY - 106 - state.retainedHeat * .7;
     drawArrow(startX, startY, endX, endY, "rgba(255,119,89,.86)", 5);
-    if (i % 2 === 0 || state.retainedHeat > 60) {
-      drawArrow(endX, endY + 4, startX + 18, startY + 50, "rgba(255,199,177,.76)", 4);
+    if (i % 2 === 0 || state.retainedHeat > 56) {
+      drawArrow(endX, endY + 4, startX + 18, startY + 50, "rgba(255,199,177,.82)", state.retainedHeat > 62 ? 6 : 4);
     }
   }
+  drawLabel(`紅外線回射 ${state.retainedHeat}%`, earthX + 88, earthY - 150, { background: "rgba(96, 32, 26, .55)", color: "#ffd8cd" });
 
-  const reflected = Math.round(state.albedo / 8);
-  for (let i = 0; i < reflected; i += 1) {
-    drawArrow(390 + i * 46, 232 + i * 12, 300 + i * 34, 122 + i * 10, "rgba(220,244,255,.74)", 4);
+  if (state.saving >= 45) {
+    drawLabel(`節能降低排放壓力 ${state.saving}%`, 28, h - 134, {
+      background: "rgba(46, 122, 84, .66)",
+      color: "#e9fff0"
+    });
+  } else {
+    drawLabel(`節能比例 ${state.saving}%：排放壓力仍在`, 28, h - 134, {
+      background: "rgba(127, 58, 44, .62)",
+      color: "#ffe6dc"
+    });
   }
 
   ctx.fillStyle = "rgba(255,255,255,.92)";

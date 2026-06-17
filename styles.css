@@ -599,6 +599,25 @@ canvas {
   font-size: 1.45rem;
 }
 
+.lab-insight {
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255, 255, 255, .16);
+  color: #fff;
+  background: rgba(10, 24, 38, .96);
+}
+
+.lab-insight strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #ffe4a8;
+}
+
+.lab-insight p {
+  margin: 0;
+  color: rgba(255, 255, 255, .82);
+  line-height: 1.65;
+}
+
 .controls-panel {
   display: flex;
   flex-direction: column;
