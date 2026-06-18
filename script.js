@@ -19,14 +19,14 @@ const presets = {
 };
 
 const actions = [
-  { title: "冷氣設定 26 到 28 度", impact: 22, effort: "容易", note: "搭配風扇與關門窗，班級最容易立刻做到。" },
-  { title: "午餐自備餐具", impact: 14, effort: "容易", note: "減少一次性用品，也能降低垃圾處理的能源。" },
-  { title: "走路、腳踏車或共乘上學", impact: 28, effort: "中等", note: "交通排放常和汽油、柴油燃燒有關。" },
-  { title: "關閉待機電源", impact: 18, effort: "容易", note: "下課或放學巡檢插座，是很好的班級任務。" },
-  { title: "校園樹蔭與綠地照護", impact: 16, effort: "中等", note: "植物能吸收二氧化碳，也能降低局部熱感。" },
-  { title: "屋頂太陽能倡議", impact: 34, effort: "困難", note: "效果高，但需要學校、家長與行政單位一起規畫。" },
-  { title: "減少食物浪費", impact: 20, effort: "中等", note: "食物從生產到運送都會用到能源，剩食也可能產生甲烷。" },
-  { title: "班級能源紀錄表", impact: 12, effort: "容易", note: "先記錄用電與行動，才能知道方案是否有效。" }
+  { icon: "❄️", title: "冷氣設定 26 到 28 度", impact: 22, effort: "容易", note: "搭配風扇與關門窗，班級最容易立刻做到。" },
+  { icon: "🍱", title: "午餐自備餐具", impact: 14, effort: "容易", note: "減少一次性用品，也能降低垃圾處理的能源。" },
+  { icon: "🚲", title: "走路、腳踏車或共乘上學", impact: 28, effort: "中等", note: "交通排放常和汽油、柴油燃燒有關。" },
+  { icon: "🔌", title: "關閉待機電源", impact: 18, effort: "容易", note: "下課或放學巡檢插座，是很好的班級任務。" },
+  { icon: "🌳", title: "校園樹蔭與綠地照護", impact: 16, effort: "中等", note: "植物能吸收二氧化碳，也能降低局部熱感。" },
+  { icon: "☀️", title: "屋頂太陽能倡議", impact: 34, effort: "困難", note: "效果高，但需要學校、家長與行政單位一起規畫。" },
+  { icon: "🥗", title: "減少食物浪費", impact: 20, effort: "中等", note: "食物從生產到運送都會用到能源，剩食也可能產生甲烷。" },
+  { icon: "📊", title: "班級能源紀錄表", impact: 12, effort: "容易", note: "先記錄用電與行動，才能知道方案是否有效。" }
 ];
 
 const claims = [
@@ -377,8 +377,10 @@ function renderActions() {
   const container = document.querySelector("#actionCards");
   container.innerHTML = actions.map((action, index) => `
     <button class="action-card ${selectedActions.has(index) ? "selected" : ""}" type="button" data-action="${index}">
+      <span class="action-emoji" aria-hidden="true">${action.icon}</span>
+      <span class="action-check" aria-hidden="true">✓</span>
       <h3>${action.title}</h3>
-      <strong>減碳指數 +${action.impact}｜${action.effort}</strong>
+      <strong>🌿 減碳指數 +${action.impact}｜${action.effort}</strong>
       <p>${action.note}</p>
     </button>
   `).join("");
@@ -388,6 +390,7 @@ function renderActions() {
   document.querySelector("#actionScore").textContent = limitedScore;
   document.querySelector("#scoreRing").style.background = `conic-gradient(var(--teal) ${limitedScore * 3.6}deg, #e5eeed 0deg)`;
   document.querySelector(".action-score").classList.toggle("active", selectedActions.size > 0);
+  document.querySelector(".action-score").classList.toggle("complete", score >= 100 && selectedActions.size <= 4);
   const feedback = document.querySelector("#actionFeedback");
   if (selectedActions.size === 0) {
     feedback.textContent = "先挑選你想實作的方案。";
