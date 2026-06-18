@@ -452,28 +452,29 @@ h3 {
 .returning-heat path {
   fill: none;
   stroke-linecap: round;
-  stroke-width: 8;
+  stroke-width: 4.5;
+  vector-effect: non-scaling-stroke;
 }
 
 .sunbeams path {
   marker-end: url("#arrowSun");
-  stroke: rgba(243, 189, 74, .88);
-  stroke-dasharray: 18 14;
-  animation: energyMove 2.7s linear infinite;
+  stroke: rgba(243, 189, 74, .76);
+  stroke-dasharray: 13 16;
+  animation: energyMove 3.6s linear infinite;
 }
 
 .escaping-heat path {
   marker-end: url("#arrowHeat");
-  stroke: rgba(217, 105, 79, .78);
-  stroke-dasharray: 15 13;
-  animation: energyMove 3s linear infinite reverse;
+  stroke: rgba(217, 105, 79, .7);
+  stroke-dasharray: 11 16;
+  animation: energyMove 4.1s linear infinite reverse;
 }
 
 .returning-heat path {
   marker-end: url("#arrowReturn");
-  stroke: rgba(240, 139, 110, .74);
-  stroke-dasharray: 14 12;
-  animation: energyMove 2.5s linear infinite;
+  stroke: rgba(240, 139, 110, .68);
+  stroke-dasharray: 10 16;
+  animation: energyMove 3.8s linear infinite;
 }
 
 .compare-visual:not(.enhanced) .extra-return,
@@ -483,12 +484,12 @@ h3 {
 }
 
 .compare-visual.enhanced .returning-heat path {
-  stroke-width: 11;
-  opacity: .95;
+  stroke-width: 6;
+  opacity: .9;
 }
 
 .compare-visual.enhanced .escaping-heat path {
-  opacity: .46;
+  opacity: .5;
 }
 
 .atmosphere {
