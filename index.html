@@ -260,10 +260,18 @@
       <div class="section-heading">
         <p class="eyebrow">單元四</p>
         <h2>好證據還是迷思？</h2>
-        <p>點選左邊說法，判斷它比較接近科學證據，還是常見迷思。</p>
+        <p>先選一個說法，再判斷它是迷思或證據，最後選出最有力的理由。</p>
       </div>
       <div class="evidence-layout">
-        <div class="claim-list" id="claimList"></div>
+        <aside class="evidence-queue">
+          <div class="evidence-score">
+            <span>判讀進度</span>
+            <strong id="evidenceProgress">0 / 4</strong>
+            <div class="evidence-track" aria-hidden="true"><div id="evidenceFill"></div></div>
+            <p id="evidenceScore">0 分</p>
+          </div>
+          <div class="claim-list" id="claimList"></div>
+        </aside>
         <article class="claim-result" id="claimResult" aria-live="polite">
           <svg class="evidence-scale" viewBox="0 0 260 150" aria-hidden="true">
             <line class="scale-bar" x1="70" y1="54" x2="190" y2="54"/>
@@ -274,8 +282,21 @@
             <text x="52" y="133">說法</text>
             <text x="170" y="133">證據</text>
           </svg>
-          <h3>選一個說法開始</h3>
-          <p>好的科學判斷需要看長期資料、能量收支和多種證據，而不是只看某一天的天氣。</p>
+          <div class="claim-workbench">
+            <p class="claim-kicker" id="claimKicker">第 1 題</p>
+            <h3 id="activeClaimText">選一個說法開始</h3>
+            <div class="judgement-buttons" role="group" aria-label="判斷類型">
+              <button type="button" data-judge="myth">這是迷思</button>
+              <button type="button" data-judge="evidence">接近證據</button>
+            </div>
+            <p class="reason-title">選出你的理由</p>
+            <div class="reason-options" id="reasonOptions"></div>
+            <div class="evidence-actions">
+              <button class="button primary" id="submitEvidence" type="button" disabled>送出判斷</button>
+              <button class="button secondary" id="resetEvidence" type="button">重新判讀</button>
+            </div>
+            <div class="evidence-feedback" id="evidenceFeedback" hidden></div>
+          </div>
         </article>
       </div>
     </section>

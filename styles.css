@@ -902,8 +902,61 @@ textarea {
 
 .evidence-layout {
   display: grid;
-  grid-template-columns: minmax(220px, 360px) minmax(0, 1fr);
-  gap: 16px;
+  grid-template-columns: minmax(260px, 390px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.evidence-queue {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  grid-auto-rows: max-content;
+}
+
+.evidence-score {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.evidence-score span,
+.claim-kicker,
+.reason-title {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 900;
+}
+
+.evidence-score strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--night);
+  font-size: 1.7rem;
+}
+
+.evidence-score p {
+  margin: 8px 0 0;
+  color: var(--ocean);
+  font-weight: 900;
+}
+
+.evidence-track {
+  height: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e5eeed;
+}
+
+#evidenceFill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--teal), var(--sun));
+  transition: width 0.35s ease;
 }
 
 .claim-list {
@@ -912,6 +965,10 @@ textarea {
 }
 
 .claim-list button {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
   padding: 12px 14px;
   color: var(--night);
   background: #fff;
@@ -922,6 +979,26 @@ textarea {
 .claim-list button.active {
   border-color: var(--ocean);
   background: #eef7fa;
+}
+
+.claim-list button strong {
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: var(--ocean);
+  background: #edf7f5;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.claim-number {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--teal);
+  font-weight: 900;
 }
 
 .claim-result {
@@ -952,11 +1029,12 @@ textarea {
   animation: scaleSettle 1.2s ease-in-out;
 }
 
-.claim-result.has-evidence .pan-left {
+.claim-result.has-evidence.is-correct .pan-left {
   animation: panDipLeft 1.2s ease-in-out;
 }
 
-.claim-result.has-evidence .pan-right {
+.claim-result.has-evidence.is-correct .pan-right,
+.claim-result.has-evidence.needs-revision .pan-left {
   animation: panDipRight 1.2s ease-in-out;
 }
 
@@ -979,6 +1057,76 @@ textarea {
 
 .claim-badge.myth {
   background: var(--coral);
+}
+
+.claim-workbench {
+  display: grid;
+  gap: 12px;
+}
+
+.claim-workbench h3 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+}
+
+.judgement-buttons,
+.reason-options,
+.evidence-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.judgement-buttons {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.judgement-buttons button,
+.reason-options button {
+  min-height: 54px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--night);
+  background: #fff;
+  font-weight: 900;
+  text-align: left;
+}
+
+.judgement-buttons button {
+  text-align: center;
+}
+
+.judgement-buttons button.selected,
+.reason-options button.selected {
+  border-color: var(--teal);
+  background: #eaf8f5;
+  box-shadow: 0 0 0 3px rgba(48, 159, 151, 0.16);
+}
+
+.evidence-actions {
+  grid-template-columns: repeat(2, minmax(0, 180px));
+}
+
+.evidence-feedback {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  animation: popIn 0.35s ease;
+}
+
+.evidence-feedback.correct {
+  border-color: rgba(83, 169, 106, 0.55);
+  background: #f0fbf2;
+}
+
+.evidence-feedback.revise {
+  border-color: rgba(222, 105, 79, 0.45);
+  background: #fff4ef;
+}
+
+.evidence-feedback p {
+  margin: 8px 0 0;
 }
 
 .quiz-card {
@@ -1192,6 +1340,18 @@ textarea {
   }
 }
 
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes drawCheck {
   to {
     stroke-dashoffset: 0;
@@ -1249,6 +1409,10 @@ textarea {
   .action-cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .evidence-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 620px) {
@@ -1278,6 +1442,20 @@ textarea {
   }
 
   .preset-row {
+    grid-template-columns: 1fr;
+  }
+
+  .claim-list button {
+    grid-template-columns: 32px minmax(0, 1fr);
+  }
+
+  .claim-list button strong {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .judgement-buttons,
+  .evidence-actions {
     grid-template-columns: 1fr;
   }
 }

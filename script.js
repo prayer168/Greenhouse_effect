@@ -34,25 +34,49 @@ const claims = [
     text: "「今天很冷，所以全球暖化不存在。」",
     type: "myth",
     title: "這是迷思",
-    explain: "天氣是短時間、單一地點的狀態；氣候要看長時間、多地區的平均趨勢。某一天冷，不代表長期沒有升溫。"
+    explain: "天氣是短時間、單一地點的狀態；氣候要看長時間、多地區的平均趨勢。某一天冷，不代表長期沒有升溫。",
+    reason: 0,
+    reasons: [
+      "只用一天的天氣下結論，沒有看長期氣候資料。",
+      "二氧化碳濃度增加，會讓所有地方每天都變熱。",
+      "只要冬天還會冷，就代表地球沒有吸收熱量。"
+    ]
   },
   {
     text: "「二氧化碳增加會影響地球能量收支。」",
     type: "evidence",
     title: "接近科學證據",
-    explain: "二氧化碳會吸收部分紅外線。濃度增加時，留在地球系統中的熱量通常會增加。"
+    explain: "二氧化碳會吸收部分紅外線。濃度增加時，留在地球系統中的熱量通常會增加。",
+    reason: 1,
+    reasons: [
+      "只要看今天的氣溫，就能知道二氧化碳有沒有增加。",
+      "二氧化碳會吸收紅外線，因此可能改變進出地球的能量。",
+      "二氧化碳只是一種氣體，不可能和熱量有關。"
+    ]
   },
   {
     text: "「溫室效應完全不好，最好一點都不要有。」",
     type: "myth",
     title: "這是迷思",
-    explain: "自然溫室效應讓地球不會過冷。真正需要注意的是人類活動造成的增強溫室效應。"
+    explain: "自然溫室效應讓地球不會過冷。真正需要注意的是人類活動造成的增強溫室效應。",
+    reason: 2,
+    reasons: [
+      "溫室效應只會造成污染，和地球溫度沒有關係。",
+      "只要把所有溫室氣體移除，生物就會更容易生活。",
+      "自然溫室效應能保留適量熱量，問題是增強太多。"
+    ]
   },
   {
     text: "「減少能源浪費可以降低排放。」",
     type: "evidence",
     title: "接近科學證據",
-    explain: "若電力或交通能源來自化石燃料，節能通常能減少燃燒與溫室氣體排放。"
+    explain: "若電力或交通能源來自化石燃料，節能通常能減少燃燒與溫室氣體排放。",
+    reason: 0,
+    reasons: [
+      "許多能源來自燃燒燃料，少浪費通常能減少排放。",
+      "節能只會省錢，和二氧化碳排放沒有任何關係。",
+      "只要有一個人節能，全球溫度隔天就會立刻下降。"
+    ]
   }
 ];
 
@@ -130,6 +154,10 @@ const canvas = document.querySelector("#climateCanvas");
 const ctx = canvas.getContext("2d");
 let animationTick = 0;
 let selectedActions = new Set();
+let activeClaimIndex = 0;
+let selectedJudgement = "";
+let selectedReason = null;
+let evidenceAnswers = new Map();
 let quizIndex = 0;
 let quizScore = 0;
 let answered = false;
@@ -405,30 +433,100 @@ function renderActions() {
 
 function renderClaims() {
   document.querySelector("#claimList").innerHTML = claims.map((claim, index) => `
-    <button type="button" data-claim="${index}">${claim.text}</button>
+    <button class="${activeClaimIndex === index ? "active" : ""}" type="button" data-claim="${index}">
+      <span class="claim-number">${index + 1}</span>
+      <span>${claim.text}</span>
+      <strong>${claimStatus(index)}</strong>
+    </button>
   `).join("");
+}
+
+function claimStatus(index) {
+  const answer = evidenceAnswers.get(index);
+  if (!answer) return "待判讀";
+  return answer.correctType && answer.correctReason ? "完成" : "修正";
 }
 
 function selectClaim(index) {
   const claim = claims[index];
-  document.querySelectorAll("[data-claim]").forEach(button => {
-    button.classList.toggle("active", Number(button.dataset.claim) === index);
+  const saved = evidenceAnswers.get(index);
+  activeClaimIndex = index;
+  selectedJudgement = saved?.judgement || "";
+  selectedReason = saved?.reasonIndex ?? null;
+  document.querySelector("#claimResult").classList.remove("has-evidence", "is-correct", "needs-revision");
+  renderClaims();
+  document.querySelector("#claimKicker").textContent = `第 ${index + 1} 題`;
+  document.querySelector("#activeClaimText").textContent = claim.text;
+  document.querySelector("#reasonOptions").innerHTML = claim.reasons.map((reason, reasonIndex) => `
+    <button class="${selectedReason === reasonIndex ? "selected" : ""}" type="button" data-reason="${reasonIndex}">
+      ${reason}
+    </button>
+  `).join("");
+  document.querySelectorAll("[data-judge]").forEach(button => {
+    button.classList.toggle("selected", button.dataset.judge === selectedJudgement);
   });
-  document.querySelector("#claimResult").innerHTML = `
-    <svg class="evidence-scale" viewBox="0 0 260 150" aria-hidden="true">
-      <line class="scale-bar" x1="70" y1="54" x2="190" y2="54"/>
-      <line x1="130" y1="36" x2="130" y2="124"/>
-      <path class="scale-pan pan-left" d="M72 58 l-34 48 h68 Z"/>
-      <path class="scale-pan pan-right" d="M188 58 l-34 48 h68 Z"/>
-      <circle cx="130" cy="34" r="12"/>
-      <text x="52" y="133">說法</text>
-      <text x="170" y="133">證據</text>
-    </svg>
+  updateEvidenceSubmit();
+  renderEvidenceFeedback(saved);
+}
+
+function updateEvidenceSubmit() {
+  document.querySelector("#submitEvidence").disabled = !selectedJudgement || selectedReason === null;
+}
+
+function renderEvidenceFeedback(answer) {
+  const feedback = document.querySelector("#evidenceFeedback");
+  if (!answer) {
+    feedback.hidden = true;
+    feedback.innerHTML = "";
+    document.querySelector("#claimResult").classList.remove("has-evidence", "is-correct", "needs-revision");
+    return;
+  }
+  const claim = claims[activeClaimIndex];
+  const resultClass = answer.correctType && answer.correctReason ? "correct" : "revise";
+  feedback.hidden = false;
+  feedback.className = `evidence-feedback ${resultClass}`;
+  feedback.innerHTML = `
     <span class="claim-badge ${claim.type === "myth" ? "myth" : ""}">${claim.title}</span>
-    <h3>${claim.text}</h3>
-    <p>${claim.explain}</p>
+    <p><strong>${answer.points} 分。</strong>${claim.explain}</p>
+    <p>最有力的理由：${claim.reasons[claim.reason]}</p>
   `;
   document.querySelector("#claimResult").classList.add("has-evidence");
+  document.querySelector("#claimResult").classList.toggle("is-correct", resultClass === "correct");
+  document.querySelector("#claimResult").classList.toggle("needs-revision", resultClass !== "correct");
+}
+
+function submitEvidenceAnswer() {
+  const claim = claims[activeClaimIndex];
+  const correctType = selectedJudgement === claim.type;
+  const correctReason = selectedReason === claim.reason;
+  const points = (correctType ? 10 : 0) + (correctReason ? 15 : 0);
+  evidenceAnswers.set(activeClaimIndex, {
+    judgement: selectedJudgement,
+    reasonIndex: selectedReason,
+    correctType,
+    correctReason,
+    points
+  });
+  renderEvidenceStats();
+  renderClaims();
+  renderEvidenceFeedback(evidenceAnswers.get(activeClaimIndex));
+}
+
+function renderEvidenceStats() {
+  const answers = [...evidenceAnswers.values()];
+  const completed = answers.length;
+  const score = answers.reduce((sum, answer) => sum + answer.points, 0);
+  document.querySelector("#evidenceProgress").textContent = `${completed} / ${claims.length}`;
+  document.querySelector("#evidenceScore").textContent = `${score} 分`;
+  document.querySelector("#evidenceFill").style.width = `${(completed / claims.length) * 100}%`;
+}
+
+function resetEvidence() {
+  selectedJudgement = "";
+  selectedReason = null;
+  evidenceAnswers = new Map();
+  renderEvidenceStats();
+  selectClaim(0);
 }
 
 function renderQuiz() {
@@ -547,10 +645,36 @@ document.querySelector("#claimList").addEventListener("click", event => {
   if (button) selectClaim(Number(button.dataset.claim));
 });
 
+document.querySelector(".judgement-buttons").addEventListener("click", event => {
+  const button = event.target.closest("[data-judge]");
+  if (!button) return;
+  selectedJudgement = button.dataset.judge;
+  document.querySelectorAll("[data-judge]").forEach(item => {
+    item.classList.toggle("selected", item === button);
+  });
+  renderEvidenceFeedback(null);
+  updateEvidenceSubmit();
+});
+
+document.querySelector("#reasonOptions").addEventListener("click", event => {
+  const button = event.target.closest("[data-reason]");
+  if (!button) return;
+  selectedReason = Number(button.dataset.reason);
+  document.querySelectorAll("[data-reason]").forEach(item => {
+    item.classList.toggle("selected", item === button);
+  });
+  renderEvidenceFeedback(null);
+  updateEvidenceSubmit();
+});
+
+document.querySelector("#submitEvidence").addEventListener("click", submitEvidenceAnswer);
+document.querySelector("#resetEvidence").addEventListener("click", resetEvidence);
+
 updateCompare("natural");
 updateReadouts();
 renderActions();
 renderClaims();
+selectClaim(0);
 bindQuizEvents();
 renderQuiz();
 setupTabs();
