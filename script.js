@@ -542,6 +542,41 @@ function resetEvidence() {
   selectClaim(0);
 }
 
+function quizBadgeMarkup() {
+  return `
+    <svg class="quiz-badge" viewBox="0 0 260 130" aria-hidden="true">
+      <circle class="quiz-sun" cx="42" cy="32" r="16"/>
+      <path class="quiz-shortwave" d="M62 38 C94 48 112 58 132 76"/>
+      <path class="quiz-shortwave second" d="M58 54 C88 70 106 84 126 96"/>
+      <path class="quiz-atmosphere" d="M76 92 C96 38 170 38 190 92"/>
+      <circle class="quiz-earth" cx="133" cy="94" r="28"/>
+      <path class="quiz-land" d="M115 82 c12 2 18 11 12 20 c-7 8-22 3-23-8 c-1-7 4-11 11-12Z"/>
+      <path class="quiz-land" d="M141 78 c16 3 24 12 26 24 c-14-3-23 5-33 1 c-11-5-9-21 7-25Z"/>
+      <g class="quiz-heat">
+        <path d="M117 72 C112 52 108 40 98 28"/>
+        <path d="M137 68 C139 48 146 34 158 22"/>
+        <path d="M154 76 C170 58 186 44 204 34"/>
+      </g>
+      <g class="quiz-return">
+        <path d="M94 42 C108 58 116 74 120 90"/>
+        <path d="M180 44 C168 62 158 78 148 94"/>
+      </g>
+      <g class="quiz-gas">
+        <circle cx="96" cy="76" r="3"/>
+        <circle cx="118" cy="56" r="3"/>
+        <circle cx="148" cy="56" r="3"/>
+        <circle cx="171" cy="76" r="3"/>
+      </g>
+      <g class="quiz-gate">
+        <path d="M214 96 V38"/>
+        <path d="M214 40 h28 l-8 12 l8 12 h-28"/>
+        <text x="228" y="88">10</text>
+      </g>
+      <path class="badge-check" d="M205 93 l10 11 l24 -30"/>
+    </svg>
+  `;
+}
+
 function renderQuiz() {
   const item = questions[quizIndex];
   answered = false;
@@ -587,6 +622,7 @@ function nextQuiz() {
   }
   const title = quizScore >= 70 ? "取得氣候探究員徽章" : "完成挑戰，建議再探究一次";
   document.querySelector(".quiz-card").innerHTML = `
+    ${quizBadgeMarkup()}
     <div class="quiz-topline"><span>闖關完成</span><strong>${quizScore} / ${questions.length * 10} 分</strong></div>
     <h3>${title}</h3>
     <p class="quiz-feedback">你已經完成溫室效應核心概念挑戰。可以回到模擬實驗，試著設計一組「高排放」和一組「減碳中」的對照實驗。</p>
@@ -596,6 +632,7 @@ function nextQuiz() {
     quizIndex = 0;
     quizScore = 0;
     document.querySelector(".quiz-card").innerHTML = `
+      ${quizBadgeMarkup()}
       <div class="quiz-topline">
         <span id="quizProgress"></span>
         <strong id="quizScore"></strong>
