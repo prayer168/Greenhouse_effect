@@ -269,6 +269,9 @@ function drawLabel(text, x, y, options = {}) {
   ctx.fillStyle = options.background ?? "rgba(10, 24, 38, .76)";
   roundRect(x, y, width, height, 8);
   ctx.fill();
+  ctx.strokeStyle = options.border ?? "rgba(255, 255, 255, .18)";
+  ctx.lineWidth = 1;
+  ctx.stroke();
   ctx.fillStyle = options.color ?? "rgba(255,255,255,.94)";
   ctx.fillText(text, x + paddingX, y + fontSize + paddingY - 2);
   ctx.restore();
@@ -308,19 +311,24 @@ function drawClimate() {
   const albedoCount = Math.round(state.albedo / 8);
   const heatLines = 3 + Math.round(state.retainedHeat / 16);
   const gasCount = Math.max(6, Math.round(state.retainedHeat / 7));
+  const labels = [];
+  const queueLabel = (text, x, y, options) => labels.push({ text, x, y, options });
 
   ctx.fillStyle = "#f5c04e";
   ctx.beginPath();
   ctx.arc(116, 108, 58, 0, Math.PI * 2);
   ctx.fill();
-  drawLabel("太陽短波進入", 194, 64, { background: "rgba(72, 48, 16, .55)", color: "#fff1c7" });
+  queueLabel("太陽短波進入", 196, 60, { background: "rgba(72, 48, 16, .78)", color: "#fff1c7" });
 
   for (let i = 0; i < 5; i += 1) {
     const y = 92 + i * 38 + Math.sin(animationTick * 3 + i) * 5;
     drawArrow(172, y, earthX - 82, earthY - 170 + i * 34, "rgba(255,224,145,.82)", 6);
   }
 
-  drawLabel(`雲與冰雪反射 ${state.albedo}%`, w - 296, 76, { background: "rgba(217, 242, 255, .18)" });
+  queueLabel(`雲與冰雪反射 ${state.albedo}%`, w - 296, 76, {
+    background: "rgba(58, 90, 112, .76)",
+    color: "#f2fbff"
+  });
   for (let i = 0; i < albedoCount; i += 1) {
     const startX = earthX - 160 + i * 46;
     const startY = earthY - 175 + Math.sin(animationTick * 2 + i) * 8;
@@ -332,8 +340,8 @@ function drawClimate() {
   ctx.beginPath();
   ctx.arc(earthX, earthY, atmosphereR, Math.PI * 1.08, Math.PI * 1.92);
   ctx.stroke();
-  drawLabel(`CO2 ${state.co2} ppm / 甲烷 ${state.methane}%`, earthX - 150, earthY - atmosphereR - 42, {
-    background: "rgba(255, 231, 163, .2)",
+  queueLabel(`CO2 ${state.co2} ppm / 甲烷 ${state.methane}%`, earthX - 108, earthY - atmosphereR - 72, {
+    background: "rgba(92, 78, 42, .82)",
     color: "#fff7d4"
   });
 
@@ -376,19 +384,24 @@ function drawClimate() {
       drawArrow(endX, endY + 4, startX + 18, startY + 50, "rgba(255,199,177,.82)", state.retainedHeat > 62 ? 6 : 4);
     }
   }
-  drawLabel(`紅外線回射 ${state.retainedHeat}%`, earthX + 88, earthY - 150, { background: "rgba(96, 32, 26, .55)", color: "#ffd8cd" });
+  queueLabel(`紅外線回射 ${state.retainedHeat}%`, earthX + 96, earthY - 138, {
+    background: "rgba(96, 32, 26, .78)",
+    color: "#ffd8cd"
+  });
 
   if (state.saving >= 45) {
-    drawLabel(`節能降低排放壓力 ${state.saving}%`, 28, h - 134, {
-      background: "rgba(46, 122, 84, .66)",
+    queueLabel(`節能降低排放壓力 ${state.saving}%`, 28, h - 134, {
+      background: "rgba(46, 122, 84, .82)",
       color: "#e9fff0"
     });
   } else {
-    drawLabel(`節能比例 ${state.saving}%：排放壓力仍在`, 28, h - 134, {
-      background: "rgba(127, 58, 44, .62)",
+    queueLabel(`節能比例 ${state.saving}%：排放壓力仍在`, 28, h - 134, {
+      background: "rgba(127, 58, 44, .82)",
       color: "#ffe6dc"
     });
   }
+
+  labels.forEach(label => drawLabel(label.text, label.x, label.y, label.options));
 
   ctx.fillStyle = "rgba(255,255,255,.92)";
   ctx.font = "700 20px Microsoft JhengHei, sans-serif";
